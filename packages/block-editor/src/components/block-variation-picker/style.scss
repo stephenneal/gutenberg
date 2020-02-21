@@ -32,10 +32,21 @@
 		margin: $grid-size/2 $grid-size $grid-size/2 0;
 		flex-shrink: 1;
 		max-width: 100px;
+
+		button {
+			display: flex;
+		}
 	}
 
 	.block-editor-block-variation-picker__variation {
 		padding: $grid-size;
+	}
+
+	.block-editor-block-variation-picker__variation-label {
+		font-family: $default-font;
+		font-size: 12px;
+		display: block;
+		text-align: center;
 	}
 }
 

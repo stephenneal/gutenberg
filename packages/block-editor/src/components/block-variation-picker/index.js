@@ -47,9 +47,15 @@ function BlockVariationPicker( {
 							iconSize={ 48 }
 							onClick={ () => onSelect( variation ) }
 							className="block-editor-block-variation-picker__variation"
+							aria-label={ variation.title }
+							title={ variation.title }
+						/>
+						<span
+							className="block-editor-block-variation-picker__variation-label"
+							role="presentation"
 						>
-							{ variation.title }
-						</Button>
+							{ variation.label }
+						</span>
 					</li>
 				) ) }
 			</ul>

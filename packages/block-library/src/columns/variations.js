@@ -15,6 +15,7 @@ const variations = [
 	{
 		name: 'two-columns-equal',
 		title: __( 'Two columns; equal split' ),
+		label: __( '50 / 50' ),
 		icon: (
 			<SVG
 				width="48"
@@ -36,6 +37,7 @@ const variations = [
 	{
 		name: 'two-columns-one-third-two-thirds',
 		title: __( 'Two columns; one-third, two-thirds split' ),
+		label: __( '30 / 70' ),
 		icon: (
 			<SVG
 				width="48"
@@ -59,6 +61,7 @@ const variations = [
 	{
 		name: 'two-columns-two-thirds-one-third',
 		title: __( 'Two columns; two-thirds, one-third split' ),
+		label: __( '70 / 30' ),
 		icon: (
 			<SVG
 				width="48"
@@ -82,6 +85,7 @@ const variations = [
 	{
 		name: 'three-columns-equal',
 		title: __( 'Three columns; equal split' ),
+		label: __( '33 / 33 / 33' ),
 		icon: (
 			<SVG
 				width="48"
@@ -105,6 +109,7 @@ const variations = [
 	{
 		name: 'three-columns-wider-center',
 		title: __( 'Three columns; wide center column' ),
+		label: __( '25 / 50 / 25' ),
 		icon: (
 			<SVG
 				width="48"
