@@ -53,6 +53,7 @@ import * as separator from './separator';
 import * as shortcode from './shortcode';
 import * as spacer from './spacer';
 import * as subhead from './subhead';
+import * as surf from './surf';
 import * as table from './table';
 import * as textColumns from './text-columns';
 import * as verse from './verse';
@@ -147,6 +148,7 @@ export const registerCoreBlocks = () => {
 		socialLink,
 		spacer,
 		subhead,
+		surf,
 		table,
 		tagCloud,
 		textColumns,
