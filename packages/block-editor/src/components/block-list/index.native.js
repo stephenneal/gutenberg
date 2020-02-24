@@ -180,6 +180,7 @@ export class BlockList extends Component {
 			shouldShowInsertionPointBefore,
 			shouldShowInsertionPointAfter,
 			customOnDelete,
+			customOnAdd,
 			__experimentalMoverDirection,
 		} = this.props;
 
@@ -203,6 +204,7 @@ export class BlockList extends Component {
 						parentWidth={ this.state.maxWidth }
 						customOnDelete={ customOnDelete }
 						horizontalDirection={ horizontalDirection }
+						customOnAdd={ customOnAdd }
 					/>
 					{ ! this.shouldShowInnerBlockAppender() &&
 						shouldShowInsertionPointAfter( clientId ) && (

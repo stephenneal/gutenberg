@@ -69,6 +69,7 @@ function ButtonsEdit( {
 				__experimentalMoverDirection="horizontal"
 				style={ buttonsStyle }
 				customOnDelete={ shouldDelete && onDelete }
+				customOnAdd={ onAddNextButton }
 			/>
 		</>
 	);
@@ -87,20 +88,38 @@ export default compose(
 		};
 	} ),
 	withDispatch( ( dispatch, { clientId }, registry ) => {
-		const { replaceInnerBlocks } = dispatch( 'core/block-editor' );
-		const { getBlocks } = registry.select( 'core/block-editor' );
+		const { replaceInnerBlocks, selectBlock, removeBlock } = dispatch(
+			'core/block-editor'
+		);
+		const { getBlocks, getBlockOrder } = registry.select(
+			'core/block-editor'
+		);
 		const innerBlocks = getBlocks( clientId );
-
-		const extendedInnerBlocks = [
-			...innerBlocks,
-			createBlock( 'core/button' ),
-		];
 
 		return {
 			// The purpose of `onAddNextButton` is giving the ability to automatically
 			// adding `Button` inside `Buttons` block on the appender press event.
-			onAddNextButton: () =>
-				replaceInnerBlocks( clientId, extendedInnerBlocks, false ),
+			onAddNextButton: ( selectedId ) => {
+				const order = getBlockOrder( clientId );
+				const selectedButtonIndex = order.findIndex(
+					( i ) => i === selectedId
+				);
+
+				const index =
+					selectedButtonIndex === -1
+						? order.length + 1
+						: selectedButtonIndex;
+
+				const insertedBlock = createBlock( 'core/button' );
+
+				innerBlocks.splice( index + 1, 0, insertedBlock );
+
+				replaceInnerBlocks( clientId, innerBlocks, true );
+				selectBlock( insertedBlock.clientId );
+			},
+			onDelete: () => {
+				removeBlock( clientId );
+			},
 		};
 	} )
 )( ButtonsEdit );

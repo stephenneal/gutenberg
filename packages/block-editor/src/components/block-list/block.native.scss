@@ -137,3 +137,11 @@
 	margin-left: -$block-edge-to-content;
 	margin-right: -$block-edge-to-content;
 }
+
+.horizontal {
+	flex-direction: row;
+}
+
+.buttonsAppender {
+	margin: $block-spacing;
+}

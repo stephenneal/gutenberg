@@ -15,8 +15,8 @@ import {
 	getUnregisteredTypeHandlerName,
 	__experimentalGetAccessibleBlockLabel as getAccessibleBlockLabel,
 } from '@wordpress/blocks';
+import { InnerBlocks } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-
 /**
  * Internal dependencies
  */
@@ -34,6 +34,11 @@ class BlockListBlock extends Component {
 
 		this.insertBlocksAfter = this.insertBlocksAfter.bind( this );
 		this.onFocus = this.onFocus.bind( this );
+		this.onButtonAppenderLayout = this.onButtonAppenderLayout.bind( this );
+
+		this.state = {
+			buttonsAppenderWidth: 0,
+		};
 	}
 
 	onFocus() {
@@ -41,6 +46,12 @@ class BlockListBlock extends Component {
 		if ( ! isSelected ) {
 			onSelect( firstToSelectId );
 		}
+	}
+
+	onButtonAppenderLayout( { nativeEvent } ) {
+		const { width } = nativeEvent.layout;
+
+		this.setState( { buttonsAppenderWidth: width } );
 	}
 
 	insertBlocksAfter( blocks ) {
@@ -53,6 +64,13 @@ class BlockListBlock extends Component {
 	}
 
 	getBlockForType() {
+		const { buttonsAppenderWidth } = this.state;
+		const { marginLeft } = styles.buttonsAppender;
+		const appenderWidth = this.props.isSelected
+			? buttonsAppenderWidth + marginLeft
+			: 0;
+		const parentWidth = this.props.parentWidth - appenderWidth;
+
 		return (
 			<BlockEdit
 				name={ this.props.name }
@@ -67,7 +85,7 @@ class BlockListBlock extends Component {
 					this.props.onCaretVerticalPositionChange
 				}
 				clientId={ this.props.clientId }
-				parentWidth={ this.props.parentWidth }
+				parentWidth={ parentWidth }
 			/>
 		);
 	}
@@ -181,6 +199,21 @@ class BlockListBlock extends Component {
 		}
 	}
 
+	renderButtonsAppender() {
+		const { name, isSelected, clientId, customOnAdd } = this.props;
+		if ( name === 'core/button' && isSelected ) {
+			return (
+				<View onLayout={ this.onButtonAppenderLayout }>
+					<InnerBlocks.ButtonBlockAppender
+						flex={ false }
+						customOnAdd={ () => customOnAdd( clientId ) }
+					/>
+				</View>
+			);
+		}
+		return null;
+	}
+
 	render() {
 		const {
 			attributes,
@@ -194,6 +227,7 @@ class BlockListBlock extends Component {
 			parentId,
 			isTouchable,
 			customOnDelete,
+			horizontalDirection,
 		} = this.props;
 
 		const accessibilityLabel = getAccessibleBlockLabel(
@@ -224,27 +258,33 @@ class BlockListBlock extends Component {
 							<Breadcrumbs clientId={ clientId } />
 						</FloatingToolbar>
 					) }
-					<View
-						pointerEvents={ isTouchable ? 'auto' : 'box-only' }
-						accessibilityLabel={ accessibilityLabel }
-						style={ this.applyBlockStyle() }
-					>
-						{ isValid ? (
-							this.getBlockForType()
-						) : (
-							<BlockInvalidWarning
-								blockTitle={ title }
-								icon={ icon }
-							/>
-						) }
-						<View style={ this.applyToolbarStyle() }>
-							{ isSelected && (
-								<BlockMobileToolbar
-									clientId={ clientId }
-									customOnDelete={ customOnDelete }
+					<View style={ horizontalDirection && styles.horizontal }>
+						<View
+							pointerEvents={ isTouchable ? 'auto' : 'box-only' }
+							accessibilityLabel={ accessibilityLabel }
+							style={ this.applyBlockStyle() }
+						>
+							{ isValid ? (
+								this.getBlockForType()
+							) : (
+								<BlockInvalidWarning
+									blockTitle={ title }
+									icon={ icon }
 								/>
 							) }
+							<View style={ this.applyToolbarStyle() }>
+								{ isSelected && (
+									<BlockMobileToolbar
+										clientId={ clientId }
+										customOnDelete={ customOnDelete }
+										horizontalDirection={
+											horizontalDirection
+										}
+									/>
+								) }
+							</View>
 						</View>
+						{ this.renderButtonsAppender() }
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
